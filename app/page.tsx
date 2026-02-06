@@ -1,7 +1,10 @@
+import { HeroBanner } from "@/components/Herobanner";
+import { featuredMovie } from "@/lib/mockData";
+
 export default function Home() {
   return (
     <main className="overflow-x-hidden">
-      <span>Main page</span>
+      <HeroBanner movie={featuredMovie} />
     </main>
   );
 }

@@ -3,12 +3,13 @@
 import { useState, useCallback } from "react";
 import { Movie } from "@/lib/types";
 import { allMovies } from "@/lib/mockData";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils";
 
 const MY_LIST_KEY = "netflix-my-list";
 
 export function useMyList() {
   const [myList, setMyList] = useState<Movie[]>(() => {
-    const stored = localStorage.getItem(MY_LIST_KEY);
+    const stored = getLocalStorage(MY_LIST_KEY);
     if (stored) {
       const ids: number[] = JSON.parse(stored);
       const movies = ids
@@ -23,10 +24,7 @@ export function useMyList() {
     setMyList((prev) => {
       if (prev.some((m) => m.id === movie.id)) return prev;
       const newList = [...prev, movie];
-      localStorage.setItem(
-        MY_LIST_KEY,
-        JSON.stringify(newList.map((m) => m.id)),
-      );
+      setLocalStorage(MY_LIST_KEY, JSON.stringify(newList.map((m) => m.id)));
       return newList;
     });
   }, []);
@@ -34,10 +32,7 @@ export function useMyList() {
   const removeFromList = useCallback((movieId: number) => {
     setMyList((prev) => {
       const newList = prev.filter((m) => m.id !== movieId);
-      localStorage.setItem(
-        MY_LIST_KEY,
-        JSON.stringify(newList.map((m) => m.id)),
-      );
+      setLocalStorage(MY_LIST_KEY, JSON.stringify(newList.map((m) => m.id)));
       return newList;
     });
   }, []);
